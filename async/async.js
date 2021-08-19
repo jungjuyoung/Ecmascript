@@ -2,18 +2,21 @@
 // clear style of using promise
 
 // 기존의 promise
-const res = () => {
-    return new Promise((resolve, reject) => {
-        resolve('...통신성공')
-    })
-}
-const resolvePromise = res();
-resolvePromise.then(console.log);
+const res = new Promise((resolve, reject) => {
+  console.log('doing something...');
+  setTimeout(() => {
+    resolve('통신성공')
+  }, 1000);
+})
+res.then(console.log);
 
 const rej = () => {
-    return new Promise((resolve, reject) => {
-        reject('...통신실패')
-    })
+  return new Promise((resolve, reject) => {
+    console.log('doing something...');
+    setTimeout(() => {
+      reject('...통신실패')
+    }, 1000)
+  })
 }
 const rejectPromise = rej();
 rejectPromise.then(console.log)
@@ -42,13 +45,14 @@ async function getBanana() {
   return '🍌';
 }
 // 콜백지옥같은...
-// function pickFruits() {
-//   return getApple()
-//     .then(apple => {
-//       return getBanana().then(banana => `apple: ${apple}, banana: ${banana}`)
-//     })
-// }
-// pickFruits().then(console.log) // 3초뒤에 apple: 🍎, banana: 🍌
+function pickFruits() {
+  return getApple()
+    .then(apple => {
+      return getBanana()
+        .then(banana => `apple: ${apple}, banana: ${banana}`)
+    })
+}
+pickFruits().then(console.log) // 3초뒤에 apple: 🍎, banana: 🍌
 
 // await ✨
 function delay(ms) {
