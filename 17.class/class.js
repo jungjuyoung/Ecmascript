@@ -32,6 +32,23 @@ Person.getName() // Uncaught TypeError: Person.getName is not a function at <ano
 // Person.prototype.name = '임의'
 // jy.getName()은 "임의"가 나옴.(jy.__proto__.getName)
 
+// Person.prototype.constructor === Person // true
+class Person {
+  static create(name) {
+    return new this(name)
+  }
+  constructor(name) {
+    this.name = name;
+   }
+}
+const jy = Person.create('주영');
+console.log(jy)
+// 결국 static method는 생성자 함수만 호출할 수 있다. 우회해서 아래와 같이 호출을 해도 
+// this가 가르키는것이 달라져 그 사용목적이 무의미해짐.
+// jy.__proto__.constructor === Person 니까 그럼 Person.create()호출 가능하니까 
+// jy.__proto__.constructor.create('JK') 할수 있다. 그러나 여기서 this는 jy._proto__ 
+
+
 // class 
 class Person {
   constructor (name) { this.name = name }
@@ -41,3 +58,26 @@ class Person {
 const jy = new Person('주영');
 console.log(jy.getName()); // 주영
 console.log(Person.isPerson(jy)); // true
+
+// class는 new 연산자 없이 호출할 수 없다
+// new.target으로 new없이 호출하면 에러를 띄움.
+
+A.prototype.constructor === A // true
+class A {
+  a() { }
+}
+// 클래스 A의 메소드 a()를 통째로 b()로 바꿔치기하려고 할 경우 읽기전용이라 안됨.
+A.prototype = {
+  b() {console.log(1)}
+}
+
+// class 내부에 generator
+// 객체 메소드로 할당
+const obj = {
+  // gene: function* () { yield }, // 기존 메소드 방식일때 
+  *gene() {yield } // 메소드 축약형일때 이름앞에 *
+}
+// 클래스 일때
+class A {
+  *gene() { yield} // 객체 메소드 축약형처럼 이름앞에 *
+}

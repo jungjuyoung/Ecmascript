@@ -33,7 +33,7 @@ const gen = function* () { yield }
 
 // 객체 메소드로 할당
 const obj = {
-  gene: function* () { yield }, // 기존 메소드 방식일때 
+  // gene: function* () { yield }, // 기존 메소드 방식일때 
   *gene() {yield } // 메소드 축약형일때 이름앞에 *
 }
 // 클래스 일때
@@ -131,19 +131,19 @@ gen.next() // undefined {value: NaN, done: false} **부분에서 first에 undefi
 // 외부와의 소통 
 function* gene() {
   let first = yield 1 // ** a
-  console.log(first);
-  let second = yield first + 2; // **
-  console.log(second);
+  console.log(first); // ** b
+  let second = yield first + 2; // ** c
+  console.log(second);// ** d
   yield second + 3
 }
 const gen = gene()
-gen.next() // 처음 호출 다음에 다시 호출을 할때 first변수에 넘겨줄 인자값을 넘김
+gen.next() // 외부로 값을 던지고 yield에서 멈춤 ** a
 // {value: 1, done: false}
-gen.next(10) // 10을 first변수에 넘긴다.
+gen.next(10) // 10을 넣어서 호출하면, 10이 first변수에 들어가고 **b 가 실행되서 10이 출력되고 외부로갑 던지고 yield에서 멈춤
 // 10
 // {value: 12, done: false}
-gen.next(20)
+gen.next(20) // 20을 넣어서 호룿하면, 20이 second변수에 들어가고 **d가 실행되서 20이 출력되고 외부로값 던지고 yield에서 멈춤
 // 20
 // {value: 23, done: false}
-gen.next() 
+gen.next() // 만약에 gen.next(30) 넥스트에 30넣어서 호출해 봤자 의미없음.
 // {value: undefined, done: true}
