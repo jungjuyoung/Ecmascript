@@ -35,24 +35,35 @@ console.dir(obj.getName2)
 // super 명령어로 상위 클래스에 접근 가능
 
 // ㅇㅏ래 두가지가 같다.
-const Person = {
-    greeting: function() {return 'hello'}
-}
-const friend = {
-    greeting: function() {
-        return 'hi, ' + super.greeting() // super로 자신의 상위의 생성자 함수 Person의 greeting호출 concised메서드로 upser 상위 호출 가능
-    }
-}
-Object.setPrototypeOf(friend, Person);// frined라는 애를 인스턴스로 하고, person이라는 애를 생성자 함수로 지정해라
+// const Person = {
+//     greeting: function() {return 'hello'}
+// }
+// const friend = {
+//     greeting: function() {
+//         return 'hi, ' + super.greeting() // super로 자신의 상위의 생성자 함수 Person의 greeting호출 concised메서드로 upser 상위 호출 가능
+//     }
+// }
+// Object.setPrototypeOf(friend, Person);// frined라는 애를 인스턴스로 하고, person이라는 애를 생성자 함수로 지정해라
 // 이렇게 들어감 friend.__proto__ = {greeting: function() {}}
 
 // -----------------------------------
 
-const Person2 = function () {}
-Person2.prototype.greeting = function() {return 'hello'}
+const Person = {
+    greeting() { return 'hello'}
+}
+const friend = {
+    greeting() {
+        return 'hi, '+super.greeting()
+    }
+}
+Object.setPrototypeOf(friend, Person);// frined라는 애를 인스턴스로 하고, person이라는 애를 생성자 함수로 지정해라
+friend.greeting() // "hi, hello"
 
-const freind = new Person2()
-freind.greeting = function () {
+const Person = function () {}
+Person.prototype.greeting = function() {return 'hello'}
+
+const friend = new Person()
+friend.greeting = function () {
     return 'hi, '+this.__proto__.greeting();
 }
 
